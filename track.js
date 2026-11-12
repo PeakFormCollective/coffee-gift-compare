@@ -31,6 +31,14 @@
   var first = false; try { first = !sessionStorage.getItem('seen'); sessionStorage.setItem('seen', '1'); } catch (e) {}
   if (first) {
     hit('session');
+    // Discovery pathway (RT1): source class of the session + landing page
+    var r = document.referrer || '', h = ''; try { h = r ? new URL(r).hostname : ''; } catch (e) {}
+    var src = !h ? (ft.campaign ? 'pinterest' : 'direct')
+      : /(^|\.)google\./.test(h) ? 'google' : /(^|\.)bing\.com$/.test(h) ? 'bing' : /duckduckgo\.com$/.test(h) ? 'duckduckgo'
+      : /yahoo\./.test(h) ? 'yahoo' : /chatgpt\.com|openai\.com|perplexity\.ai|claude\.ai|copilot\.microsoft\.com|gemini\.google\.com/.test(h) ? 'ai'
+      : /pinterest\./.test(h) ? 'pinterest' : /facebook\.|instagram\.|t\.co$|x\.com|reddit\.com|linkedin\./.test(h) ? 'social'
+      : h === location.hostname ? 'internal' : 'other';
+    hit('src-' + src); hit('land-' + page); hit('land-' + page + '-' + src);
     if (ft.campaign) hit('ses-' + ft.campaign);
     if (/pinterest\./.test(document.referrer) || /pinterest/i.test(ft.source || '')) hit('ref-pinterest');
   }
@@ -49,8 +57,9 @@
   }
 
   document.addEventListener('click', function (ev) {
-    var a = ev.target.closest && ev.target.closest('a[href^="http"]');
-    if (!a || a.hostname === location.hostname) return;
+    var a = ev.target.closest && ev.target.closest('a[href]');
+    if (!a) return;
+    if (a.hostname === location.hostname) { if (a.id) hit('nav-' + a.id); return; } // internal action (RT1)
     var id = a.id || 'no-id', merchant = a.hostname.replace(/^www\.|^store\./, '');
     var pin = ft.campaign || 'none';
     hit('click-' + id); hit('clickpin-' + pin);
