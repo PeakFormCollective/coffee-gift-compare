@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ChatGPT for Construction Estimating: What It Can and Can't Do (+3 Prompts)</title>
+<meta name="description" content="Using ChatGPT for construction estimating: where it saves contractors time (scope checklists, bid letters, change orders), where it can't be trusted (takeoffs, prices), and 3 copy-ready prompts.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav><span class="brand" style="font-weight:700">PeakForm Lab</span></nav>
+<main class="wrap">
+<h1>ChatGPT for Construction Estimating: What It Can and Can't Do</h1>
+<p><strong>Short answer:</strong> ChatGPT is useful for the <strong>writing and checklist</strong> parts of estimating: scope lists, bid letters, change orders. It is <strong>not reliable for quantities or prices</strong>. Use it to avoid missing items and to write faster, then put in your own numbers.</p>
+
+<h2>Where it saves time</h2>
+<ul>
+<li><strong>Scope checklists:</strong> turn a job description into a list of items, materials and labor tasks to price, so fewer things get missed.</li>
+<li><strong>Bid and proposal letters:</strong> clear inclusions, exclusions, assumptions and payment terms, written in a few seconds.</li>
+<li><strong>Change orders:</strong> plain-language descriptions a homeowner can understand and sign.</li>
+<li><strong>Reading specs:</strong> summarize a spec section you paste in, and list the questions to ask before you bid.</li>
+</ul>
+
+<h2>Where you can't trust it</h2>
+<ul>
+<li><strong>Takeoffs:</strong> don't rely on it to measure quantities from drawings or photos.</li>
+<li><strong>Prices:</strong> it doesn't know your local material prices, your supplier or your labor rate.</li>
+<li><strong>Code and permits:</strong> it can be wrong, and codes vary by location. Check with your local authority.</li>
+<li><strong>Client data:</strong> don't paste confidential client details into a tool whose data terms you haven't checked.</li>
+</ul>
+
+<h2>Which estimating task costs you the most time?</h2>
+<div class="opts" id="aware">
+<button class="opt" data-task="takeoffs">Takeoffs / quantities</button>
+<button class="opt" data-task="pricing">Pricing labor & materials</button>
+<button class="opt" data-task="bids">Writing bids & proposals</button>
+<button class="opt" data-task="changeorders">Change orders</button>
+<button class="opt" data-task="other">Something else</button>
+</div>
+<p class="test hidden" id="aware-thanks">Thanks, noted. It helps us decide what's worth building.</p>
+
+<h2>3 prompts to try (copy and fill in the brackets)</h2>
+<div class="prompt" id="p1">I'm a [trade] contractor pricing this job: [describe the job, size, location type]. List every scope item, material category and labor task I should price, grouped by phase. Flag items contractors commonly forget on this kind of job. Don't give prices.</div>
+<button class="opt" data-copy="1">Copy prompt 1</button>
+<div class="prompt" id="p2">Write a short, professional bid proposal for [client name] for [job]. Total price: [$]. Inclusions: [list]. Exclusions: [list]. Assumptions: [list]. Payment terms: [terms]. Valid for 30 days. Plain language, no jargon.</div>
+<button class="opt" data-copy="2">Copy prompt 2</button>
+<div class="prompt" id="p3">Write a change order description. Original scope: [x]. Requested change: [y]. Added labor: [hours]. Added materials: [list]. Price change: [$]. Schedule impact: [days]. Make it clear for a homeowner to read and sign.</div>
+<button class="opt" data-copy="3">Copy prompt 3</button>
+
+<h2>Would a complete estimating prompt kit help?</h2>
+<p>We're considering a kit of tested prompts for each trade (scope checklists, bid letters, change orders, RFIs, follow-ups).</p>
+<button class="cta" id="kit" style="border:0;cursor:pointer">I'd want the estimating prompt kit</button>
+<p class="test"><strong>Demand test:</strong> this kit doesn't exist yet. Clicking only tells us whether to build it. Nothing is for sale and no email is collected.</p>
+<div class="hidden" id="price">
+<p><strong>Thanks. One more click:</strong> what would a kit like this be worth to you? (No payment. This only helps us decide.)</p>
+<div class="opts">
+<button class="opt" data-price="0">$0: only if free</button>
+<button class="opt" data-price="19">$19</button>
+<button class="opt" data-price="49">$49</button>
+<button class="opt" data-price="99">$99 or more</button>
+</div>
+<p class="test hidden" id="price-thanks">Noted. Thank you.</p>
+</div>
+
+<footer>PeakForm Lab publishes small, honest experiments. No affiliate links, no tracking cookies, no personal data collected (anonymous click counts only).</footer>
+</main>
+<script src="track.js"></script>
+<script>
+(function () {
+  function once(key) { try { if (sessionStorage.getItem('e-' + key)) return false; sessionStorage.setItem('e-' + key, '1'); } catch (e) {} return true; }
+  function hit(k) { if (window.pfcHit && once(k)) window.pfcHit(k); }
+  var P = 'c7-';
+  document.querySelectorAll('[data-task]').forEach(function (b) { b.addEventListener('click', function () {
+    document.querySelectorAll('[data-task]').forEach(function (x) { x.classList.remove('on'); }); b.classList.add('on');
+    hit(P + 'aware-any'); hit(P + 'aware-' + b.getAttribute('data-task')); document.getElementById('aware-thanks').classList.remove('hidden'); }); });
+  document.querySelectorAll('[data-copy]').forEach(function (b) { b.addEventListener('click', function () {
+    var n = b.getAttribute('data-copy'), t = document.getElementById('p' + n).innerText;
+    try { navigator.clipboard.writeText(t); } catch (e) {}
+    b.textContent = 'Copied'; hit(P + 'copy-any'); hit(P + 'copy-' + n); }); });
+  document.getElementById('kit').addEventListener('click', function () { hit(P + 'kit-interest'); document.getElementById('price').classList.remove('hidden'); });
+  document.querySelectorAll('[data-price]').forEach(function (b) { b.addEventListener('click', function () {
+    document.querySelectorAll('[data-price]').forEach(function (x) { x.classList.remove('on'); }); b.classList.add('on');
+    hit(P + 'price-' + b.getAttribute('data-price')); document.getElementById('price-thanks').classList.remove('hidden'); }); });
+})();
+</script>
+</body>
+</html>
